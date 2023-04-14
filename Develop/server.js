@@ -20,10 +20,13 @@ app.use(express.static("public"));
 // Route Handlers
 
 // GET Methods
+
+// Sends back JSON representation of all notes
 app.get("/api/notes", (req, res) => {
   res.json(notes.slice(1));
 });
 
+// Sends back notes.html file from public directory
 app.get("/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
