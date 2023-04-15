@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // This is to import db.json file for storing and retrieving notes
-const notes = require('./db/db.json');
+const notes = require("./db/db.json");
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -26,9 +26,13 @@ app.get("/api/notes", (req, res) => {
   res.json(notes.slice(1));
 });
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
 // Sends back notes.html file from public directory
 app.get("/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, './public/index.html'));
+  res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
 
 app.get("*", (req, res) => {
@@ -37,7 +41,6 @@ app.get("*", (req, res) => {
 
 // Function to create a new note object with body parameter
 function createNoteObject(body, notes) {
-
   const note = body;
 
   // Initializes a notes array to store the note object
@@ -52,15 +55,15 @@ function createNoteObject(body, notes) {
 
   // To write updated notesArray to db.json with 2 spaces for indentation
   fs.writeFileSync(
-    path.join(__dirname, './db/db.json'),
+    path.join(__dirname, "./db/db.json"),
     JSON.stringify(notesArray, null, 2)
-  )
+  );
 }
 
 // POST Method
-app.post('/api/notes', (req, res) => {
+app.post("/api/notes", (req, res) => {
   const note = createNoteObject(req.body, notes);
-  res.json(note)
-})
+  res.json(note);
+});
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));
