@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // This is to import db.json file for storing and retrieving notes
-const notes = require("./db/db.json");
+const notes = require('./db/db.json');
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -28,7 +28,7 @@ app.get("/api/notes", (req, res) => {
 
 // Sends back notes.html file from public directory
 app.get("/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, "./public/notes.html"));
+  res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 app.get("*", (req, res) => {
