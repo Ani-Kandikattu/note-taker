@@ -10,7 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // This is to import db.json file for storing and retrieving notes
-const notes = require("./db/db.json");
+// const jsonNotes = fs.readFileSync("./db/db.json");
+// const notes = JSON.parse(jsonNotes);
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +24,9 @@ app.use(express.static("public"));
 
 // Sends back JSON representation of all notes
 app.get("/api/notes", (req, res) => {
-  res.json(notes.slice(1));
+  // console.log(notes);
+  let notes = readNotesFromfile("./db/db.json");
+  res.send(notes);
 });
 
 app.get("/", (req, res) => {
@@ -39,16 +42,23 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
+function readNotesFromfile(filePath) {
+  // This is to import db.json file for storing and retrieving notes
+  const jsonNotes = fs.readFileSync(filePath);
+  return (notes = JSON.parse(jsonNotes));
+}
+
 // Function to create a new note object with body parameter
 function createNoteObject(body, notes) {
   const note = body;
 
-  // Initializes a notes array to store the note object
-  notesArray = [];
-
+  // // Initializes a notes array to store the note object
+  // notesArray = [];
+  const notesArray = Object.values(notes);
+  console.log(notesArray);
   // Sets the id for the new note to the first element of the notesArray and increments by 1 to ensure each note has a unique id.
-  body.id = notesArray[0];
-  notesArray[0]++;
+  // body.id = notesArray[0];
+  // notesArray[0]++;
 
   // To push the new note to the array
   notesArray.push(note);
@@ -62,6 +72,7 @@ function createNoteObject(body, notes) {
 
 // POST Method
 app.post("/api/notes", (req, res) => {
+  let notes = readNotesFromfile("./db/db.json");
   const note = createNoteObject(req.body, notes);
   res.json(note);
 });
