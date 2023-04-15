@@ -6,6 +6,8 @@ const path = require("path");
 // Creating a new instance of express and assigning it to app
 const app = express();
 
+const notesFilePath = "./db/db.json";
+
 // This will set PORT variable to 3001 if there is no other value
 const PORT = process.env.PORT || 3001;
 
@@ -25,7 +27,7 @@ app.use(express.static("public"));
 // Sends back JSON representation of all notes
 app.get("/api/notes", (req, res) => {
   // console.log(notes);
-  let notes = readNotesFromfile("./db/db.json");
+  let notes = readNotesFromfile(notesFilePath);
   res.send(notes);
 });
 
@@ -65,14 +67,14 @@ function createNoteObject(body, notes) {
 
   // To write updated notesArray to db.json with 2 spaces for indentation
   fs.writeFileSync(
-    path.join(__dirname, "./db/db.json"),
+    path.join(__dirname, notesFilePath),
     JSON.stringify(notesArray, null, 2)
   );
 }
 
 // POST Method
 app.post("/api/notes", (req, res) => {
-  let notes = readNotesFromfile("./db/db.json");
+  let notes = readNotesFromfile(notesFilePath);
   const note = createNoteObject(req.body, notes);
   res.json(note);
 });
